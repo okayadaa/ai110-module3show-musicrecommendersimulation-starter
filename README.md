@@ -68,144 +68,30 @@ You can add more tests in `tests/test_recommender.py`.
 
 ## Experiments You Tried
 
-Use this section to document the experiments you ran. For example:
+- Changes on the weights (genre: 2.0 -> 0.5, mood: 1.0 -> 0.3, energy: 1.5 -> 0.2):
+  Genre and mood was a dominating score but tweaking the values, there was a small change where energy and acoustic have real influence on the rankings. The concept behind it is that balanced weights is more diverse recommendations due to the reducing values of genre and mood dominance, the energy and other features establishes a compete fair. 
 
-- What happened when you changed the weight on genre from 2.0 to 0.5
-- What happened when you added tempo or valence to the score
-- How did your system behave for different types of users
+- Adding tempo or valence to the score:
+  Based on the output, there are two new data points 'tempo' where song'ss beats per minute vs your target and 'valence' where song's musical presents positiveness. The results rely on actual musical characteristics like speed and mood vibe. Which leads the recommender to a more multi-dimensional
+
+- System behavior for different types of users:
+  The system recommends songs based on user's music preferences by the score of each songs. Genre and mood provide full points if it matches exactly. Energy, tempo, valence are based on closer to target (higher score). The system simply balances genre and mood preferences with audio features such as energy, tempo, and acoustic
 
 ---
 
 ## Limitations and Risks
 
-Summarize some limitations of your recommender.
+--> energy_gap dominates ranking when the score rewards provide too much importance in user_energy - song_energy. Songs with the closest energy wins if it strongly favors small gap. Therefore, top results will continue being in the first 2-3 high energy songs. User will consistenly see the same energy (around 0.75 - 0.90) so discovery shrinks.
 
-Examples:
+--> Mid energy users could be underserved in the dataset since energy is clustered low or high. With few mid energy songs may get weak or unstable matches
 
-- It only works on a tiny catalog
-- It does not understand lyrics or language
-- It might over favor one genre or mood
+--> Extreme users can be treated unevenly if using a hard cutoff on energy gap. Low and high energy users could potentially lose candidates quickly  
 
-You will go deeper on this in your model card.
+
 
 ---
 
 ## Reflection
 
-Read and complete `model_card.md`:
-
-[**Model Card**](model_card.md)
-
-Write 1 to 2 paragraphs here about what you learned:
-
-- about how recommenders turn data into predictions
-- about where bias or unfairness could show up in systems like this
-
-
----
-
-## 7. `model_card_template.md`
-
-Combines reflection and model card framing from the Module 3 guidance. :contentReference[oaicite:2]{index=2}  
-
-```markdown
-# 🎧 Model Card - Music Recommender Simulation
-
-## 1. Model Name
-
-Give your recommender a name, for example:
-
-> VibeFinder 1.0
-
----
-
-## 2. Intended Use
-
-- What is this system trying to do
-- Who is it for
-
-Example:
-
-> This model suggests 3 to 5 songs from a small catalog based on a user's preferred genre, mood, and energy level. It is for classroom exploration only, not for real users.
-
----
-
-## 3. How It Works (Short Explanation)
-
-Describe your scoring logic in plain language.
-
-- What features of each song does it consider
-- What information about the user does it use
-- How does it turn those into a number
-
-Try to avoid code in this section, treat it like an explanation to a non programmer.
-
----
-
-## 4. Data
-
-Describe your dataset.
-
-- How many songs are in `data/songs.csv`
-- Did you add or remove any songs
-- What kinds of genres or moods are represented
-- Whose taste does this data mostly reflect
-
----
-
-## 5. Strengths
-
-Where does your recommender work well
-
-You can think about:
-- Situations where the top results "felt right"
-- Particular user profiles it served well
-- Simplicity or transparency benefits
-
----
-
-## 6. Limitations and Bias
-
-Where does your recommender struggle
-
-Some prompts:
-- Does it ignore some genres or moods
-- Does it treat all users as if they have the same taste shape
-- Is it biased toward high energy or one genre by default
-- How could this be unfair if used in a real product
-
----
-
-## 7. Evaluation
-
-How did you check your system
-
-Examples:
-- You tried multiple user profiles and wrote down whether the results matched your expectations
-- You compared your simulation to what a real app like Spotify or YouTube tends to recommend
-- You wrote tests for your scoring logic
-
-You do not need a numeric metric, but if you used one, explain what it measures.
-
----
-
-## 8. Future Work
-
-If you had more time, how would you improve this recommender
-
-Examples:
-
-- Add support for multiple users and "group vibe" recommendations
-- Balance diversity of songs instead of always picking the closest match
-- Use more features, like tempo ranges or lyric themes
-
----
-
-## 9. Personal Reflection
-
-A few sentences about what you learned:
-
-- What surprised you about how your system behaved
-- How did building this change how you think about real music recommenders
-- Where do you think human judgment still matters, even if the model seems "smart"
+Based on my analyzation for vibeFinder is the system collects data about users(what they like or behavior) and it observes patterns. It looks for connections of what songs users like or user's having similar music taste to other user's taste. Therefore, it establishes predictions and suggest a recommendation. The common problem areas is that there were popular bias where the system would recommend well knoen popular items because of the amount of data. Another common issue was the cold start where new users would have little data so the recommendations would be either poor or biased towards defaults. Lastly, one unfairness did appear with feedback loop. It's when popular recommendations get recommended more becoming extremely popular while other fade away.  
 
